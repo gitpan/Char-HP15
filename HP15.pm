@@ -18,7 +18,7 @@ use Ehp15;
 
 BEGIN { eval q{ use vars qw($VERSION) } }
 
-$VERSION = sprintf '%d.%02d', q$Revision: 0.78 $ =~ m/(\d+)/oxmsg;
+$VERSION = sprintf '%d.%02d', q$Revision: 0.79 $ =~ m/(\d+)/oxmsg;
 
 # poor Symbol.pm - substitute of real Symbol.pm
 BEGIN {
@@ -5161,7 +5161,7 @@ incompatible upgrade part to traditional Perl should be rewound.
 You need write 'use HP15;' in your script.
 
   ---------------------------------
-  Before      After
+  Before      You do
   ---------------------------------
   (nothing)   use HP15;
   ---------------------------------
@@ -5248,10 +5248,12 @@ Also POSIX-style character classes.
   [:digit:]     [\x30-\x39]
   [:graph:]     [\x21-\x7F]
   [:lower:]     [\x61-\x7A]
+                [\x41-\x5A\x61-\x7A]     (/i modifier)
   [:print:]     [\x20-\x7F]
   [:punct:]     [\x21-\x2F\x3A-\x3F\x40\x5B-\x5F\x60\x7B-\x7E]
   [:space:]     [\x09\x0A\x0B\x0C\x0D\x20]
   [:upper:]     [\x41-\x5A]
+                [\x41-\x5A\x61-\x7A]     (/i modifier)
   [:word:]      [\x30-\x39\x41-\x5A\x5F\x61-\x7A]
   [:xdigit:]    [\x30-\x39\x41-\x46\x61-\x66]
   [:^alnum:]    (?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x30-\x39\x41-\x5A\x61-\x7A])
@@ -5262,10 +5264,12 @@ Also POSIX-style character classes.
   [:^digit:]    (?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x30-\x39])
   [:^graph:]    (?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x21-\x7F])
   [:^lower:]    (?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x61-\x7A])
+                (?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE])           (/i modifier)
   [:^print:]    (?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x20-\x7F])
   [:^punct:]    (?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x21-\x2F\x3A-\x3F\x40\x5B-\x5F\x60\x7B-\x7E])
   [:^space:]    (?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x09\x0A\x0B\x0C\x0D\x20])
   [:^upper:]    (?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x41-\x5A])
+                (?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE])           (/i modifier)
   [:^word:]     (?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x30-\x39\x41-\x5A\x5F\x61-\x7A])
   [:^xdigit:]   (?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x30-\x39\x41-\x46\x61-\x66])
   ---------------------------------------------------------------------------
@@ -5328,7 +5332,7 @@ functions.
 
 =head1 Un-Escaping bytes::* Functions (HP15.pm provides)
 
-HP15.pm remove 'bytes::' at head of function name.
+HP15.pm removes 'bytes::' at head of function name.
 
   ------------------------------------
   Before           After
@@ -5343,7 +5347,7 @@ HP15.pm remove 'bytes::' at head of function name.
 
 =head1 Un-Escaping \ Of \N, \p, \P and \X (HP15.pm provides)
 
-HP15.pm remove '\' at head of alphanumeric regexp metasymbols \N, \p, \P
+HP15.pm removes '\' at head of alphanumeric regexp metasymbols \N, \p, \P
 and \X. By this method, you can avoid the trap of the abstraction.
 
   ------------------------------------
@@ -5365,37 +5369,37 @@ and \X. By this method, you can avoid the trap of the abstraction.
 
 Insert 'Ehp15::' instead of '-' of operator.
 
-  ---------------------------------
-  Before      After
-  ---------------------------------
-  -r          Ehp15::r
-  -w          Ehp15::w
-  -x          Ehp15::x
-  -o          Ehp15::o
-  -R          Ehp15::R
-  -W          Ehp15::W
-  -X          Ehp15::X
-  -O          Ehp15::O
-  -e          Ehp15::e
-  -z          Ehp15::z
-  -f          Ehp15::f
-  -d          Ehp15::d
-  -l          Ehp15::l
-  -p          Ehp15::p
-  -S          Ehp15::S
-  -b          Ehp15::b
-  -c          Ehp15::c
-  -t          -t
-  -u          Ehp15::u
-  -g          Ehp15::g
-  -k          Ehp15::k
-  -T          Ehp15::T
-  -B          Ehp15::B
-  -s          Ehp15::s
-  -M          Ehp15::M
-  -A          Ehp15::A
-  -C          Ehp15::C
-  ---------------------------------
+  --------------------------------------------------------------------------
+  Before   After      Meaning
+  --------------------------------------------------------------------------
+  -r       Ehp15::r   File is readable by effective uid/gid
+  -w       Ehp15::w   File is writable by effective uid/gid
+  -x       Ehp15::x   File is executable by effective uid/gid
+  -o       Ehp15::o   File is owned by effective uid
+  -R       Ehp15::R   File is readable by real uid/gid
+  -W       Ehp15::W   File is writable by real uid/gid
+  -X       Ehp15::X   File is executable by real uid/gid
+  -O       Ehp15::O   File is owned by real uid
+  -e       Ehp15::e   File exists
+  -z       Ehp15::z   File has zero size
+  -f       Ehp15::f   File is a plain file
+  -d       Ehp15::d   File is a directory
+  -l       Ehp15::l   File is a symbolic link
+  -p       Ehp15::p   File is a named pipe (FIFO)
+  -S       Ehp15::S   File is a socket
+  -b       Ehp15::b   File is a block special file
+  -c       Ehp15::c   File is a character special file
+  -t       -t         Filehandle is opened to a tty
+  -u       Ehp15::u   File has setuid bit set
+  -g       Ehp15::g   File has setgid bit set
+  -k       Ehp15::k   File has sticky bit set
+  -T       Ehp15::T   File is a text file
+  -B       Ehp15::B   File is a binary file (opposite of -T)
+  -s       Ehp15::s   File has nonzero size (returns size in bytes)
+  -M       Ehp15::M   Age of file (at startup) in days since modification
+  -A       Ehp15::A   Age of file (at startup) in days since last access
+  -C       Ehp15::C   Age of file (at startup) in days since inode change
+  --------------------------------------------------------------------------
 
 As of Perl 5.00503, as a form of purely syntactic sugar, you can stack file
 test operators, in a way that -w -x $file is equivalent to -x $file && -w _ .
@@ -5422,16 +5426,38 @@ Back to and see 'Escaping Your Script'. Enjoy hacking!!
 You need write 'HP15::' at head of function name when you want character
 oriented function. See 'Character Oriented Functions'.
 
-  ---------------------------------
-  Before      After
-  ---------------------------------
-  ord         HP15::ord
-  reverse     HP15::reverse
-  length      HP15::length
-  substr      HP15::substr
-  index       HP15::index
-  rindex      HP15::rindex
-  ---------------------------------
+  --------------------------------------------------------
+  Function   Character Oriented   Description
+  --------------------------------------------------------
+  ord        HP15::ord
+  reverse    HP15::reverse
+  length     HP15::length
+  substr     HP15::substr
+  index      HP15::index          See 'About Indexes'
+  rindex     HP15::rindex         See 'About Rindexes'
+  --------------------------------------------------------
+
+  About Indexes
+  -------------------------------------------------------------------------
+  Function       Works as    Returns as   Description
+  -------------------------------------------------------------------------
+  index          Character   Byte         JPerl semantics (most useful)
+  (same as Ehp15::index)
+  HP15::index    Character   Character    Character-oriented semantics
+  CORE::index    Byte        Byte         Byte-oriented semantics
+  (nothing)      Byte        Character    (most useless)
+  -------------------------------------------------------------------------
+
+  About Rindexes
+  -------------------------------------------------------------------------
+  Function       Works as    Returns as   Description
+  -------------------------------------------------------------------------
+  rindex         Character   Byte         JPerl semantics (most useful)
+  (same as Ehp15::rindex)
+  HP15::rindex   Character   Character    Character-oriented semantics
+  CORE::rindex   Byte        Byte         Byte-oriented semantics
+  (nothing)      Byte        Character    (most useless)
+  -------------------------------------------------------------------------
 
 =head1 Character Oriented Functions
 
@@ -5970,7 +5996,7 @@ programming environment like at that time.
 
  Programming Perl, Second Edition
  By Larry Wall, Tom Christiansen, Randal L. Schwartz
- January 1900 (really so?)
+ October 1996
  Pages: 670
  ISBN 10: 1-56592-149-6 | ISBN 13: 9781565921498
  http://shop.oreilly.com/product/9781565921498.do
@@ -5981,6 +6007,16 @@ programming environment like at that time.
  Pages: 1104
  ISBN 10: 0-596-00027-8 | ISBN 13: 9780596000271
  http://shop.oreilly.com/product/9780596000271.do
+
+ Programming Perl, 4th Edition
+ By: Tom Christiansen, brian d foy, Larry Wall, Jon Orwant
+ Publisher: O'Reilly Media
+ Formats: Print, Ebook, Safari Books Online
+ Released: February 2012
+ Pages: 1054
+ Print ISBN: 978-0-596-00492-7 | ISBN 10: 0-596-00492-3
+ Ebook ISBN: 978-1-4493-9890-3 | ISBN 10: 1-4493-9890-1
+ http://shop.oreilly.com/product/9780596004927.do
 
  Perl Cookbook, Second Edition
  By Tom Christiansen, Nathan Torkington

@@ -341,5 +341,5 @@ See also code table:
 
 SEE ALSO
 
-perl, Sjis.pm
+perl, HP15.pm, Ehp15.pm, jacode.pl
 

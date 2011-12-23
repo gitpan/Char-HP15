@@ -18,7 +18,7 @@ use Char::Ehp15;
 
 BEGIN { eval q{ use vars qw($VERSION) } }
 
-$VERSION = sprintf '%d.%02d', q$Revision: 0.78 $ =~ m/(\d+)/oxmsg;
+$VERSION = sprintf '%d.%02d', q$Revision: 0.79 $ =~ m/(\d+)/oxmsg;
 
 # poor Symbol.pm - substitute of real Symbol.pm
 BEGIN {
@@ -5161,7 +5161,7 @@ incompatible upgrade part to traditional Perl should be rewound.
 You need write 'use Char::HP15;' in your script.
 
   ---------------------------------
-  Before      After
+  Before      You do
   ---------------------------------
   (nothing)   use Char::HP15;
   ---------------------------------
@@ -5248,10 +5248,12 @@ Also POSIX-style character classes.
   [:digit:]     [\x30-\x39]
   [:graph:]     [\x21-\x7F]
   [:lower:]     [\x61-\x7A]
+                [\x41-\x5A\x61-\x7A]     (/i modifier)
   [:print:]     [\x20-\x7F]
   [:punct:]     [\x21-\x2F\x3A-\x3F\x40\x5B-\x5F\x60\x7B-\x7E]
   [:space:]     [\x09\x0A\x0B\x0C\x0D\x20]
   [:upper:]     [\x41-\x5A]
+                [\x41-\x5A\x61-\x7A]     (/i modifier)
   [:word:]      [\x30-\x39\x41-\x5A\x5F\x61-\x7A]
   [:xdigit:]    [\x30-\x39\x41-\x46\x61-\x66]
   [:^alnum:]    (?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x30-\x39\x41-\x5A\x61-\x7A])
@@ -5262,10 +5264,12 @@ Also POSIX-style character classes.
   [:^digit:]    (?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x30-\x39])
   [:^graph:]    (?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x21-\x7F])
   [:^lower:]    (?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x61-\x7A])
+                (?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE])           (/i modifier)
   [:^print:]    (?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x20-\x7F])
   [:^punct:]    (?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x21-\x2F\x3A-\x3F\x40\x5B-\x5F\x60\x7B-\x7E])
   [:^space:]    (?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x09\x0A\x0B\x0C\x0D\x20])
   [:^upper:]    (?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x41-\x5A])
+                (?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE])           (/i modifier)
   [:^word:]     (?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x30-\x39\x41-\x5A\x5F\x61-\x7A])
   [:^xdigit:]   (?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x30-\x39\x41-\x46\x61-\x66])
   ---------------------------------------------------------------------------
@@ -5328,7 +5332,7 @@ functions.
 
 =head1 Un-Escaping bytes::* Functions (Char/HP15.pm provides)
 
-Char/HP15.pm remove 'bytes::' at head of function name.
+Char/HP15.pm removes 'bytes::' at head of function name.
 
   ------------------------------------
   Before           After
@@ -5343,7 +5347,7 @@ Char/HP15.pm remove 'bytes::' at head of function name.
 
 =head1 Un-Escaping \ Of \N, \p, \P and \X (Char/HP15.pm provides)
 
-Char/HP15.pm remove '\' at head of alphanumeric regexp metasymbols \N, \p, \P
+Char/HP15.pm removes '\' at head of alphanumeric regexp metasymbols \N, \p, \P
 and \X. By this method, you can avoid the trap of the abstraction.
 
   ------------------------------------
@@ -5365,37 +5369,37 @@ and \X. By this method, you can avoid the trap of the abstraction.
 
 Insert 'Char::Ehp15::' instead of '-' of operator.
 
-  ---------------------------------
-  Before      After
-  ---------------------------------
-  -r          Char::Ehp15::r
-  -w          Char::Ehp15::w
-  -x          Char::Ehp15::x
-  -o          Char::Ehp15::o
-  -R          Char::Ehp15::R
-  -W          Char::Ehp15::W
-  -X          Char::Ehp15::X
-  -O          Char::Ehp15::O
-  -e          Char::Ehp15::e
-  -z          Char::Ehp15::z
-  -f          Char::Ehp15::f
-  -d          Char::Ehp15::d
-  -l          Char::Ehp15::l
-  -p          Char::Ehp15::p
-  -S          Char::Ehp15::S
-  -b          Char::Ehp15::b
-  -c          Char::Ehp15::c
-  -t          -t
-  -u          Char::Ehp15::u
-  -g          Char::Ehp15::g
-  -k          Char::Ehp15::k
-  -T          Char::Ehp15::T
-  -B          Char::Ehp15::B
-  -s          Char::Ehp15::s
-  -M          Char::Ehp15::M
-  -A          Char::Ehp15::A
-  -C          Char::Ehp15::C
-  ---------------------------------
+  --------------------------------------------------------------------------
+  Before   After      Meaning
+  --------------------------------------------------------------------------
+  -r       Char::Ehp15::r   File is readable by effective uid/gid
+  -w       Char::Ehp15::w   File is writable by effective uid/gid
+  -x       Char::Ehp15::x   File is executable by effective uid/gid
+  -o       Char::Ehp15::o   File is owned by effective uid
+  -R       Char::Ehp15::R   File is readable by real uid/gid
+  -W       Char::Ehp15::W   File is writable by real uid/gid
+  -X       Char::Ehp15::X   File is executable by real uid/gid
+  -O       Char::Ehp15::O   File is owned by real uid
+  -e       Char::Ehp15::e   File exists
+  -z       Char::Ehp15::z   File has zero size
+  -f       Char::Ehp15::f   File is a plain file
+  -d       Char::Ehp15::d   File is a directory
+  -l       Char::Ehp15::l   File is a symbolic link
+  -p       Char::Ehp15::p   File is a named pipe (FIFO)
+  -S       Char::Ehp15::S   File is a socket
+  -b       Char::Ehp15::b   File is a block special file
+  -c       Char::Ehp15::c   File is a character special file
+  -t       -t         Filehandle is opened to a tty
+  -u       Char::Ehp15::u   File has setuid bit set
+  -g       Char::Ehp15::g   File has setgid bit set
+  -k       Char::Ehp15::k   File has sticky bit set
+  -T       Char::Ehp15::T   File is a text file
+  -B       Char::Ehp15::B   File is a binary file (opposite of -T)
+  -s       Char::Ehp15::s   File has nonzero size (returns size in bytes)
+  -M       Char::Ehp15::M   Age of file (at startup) in days since modification
+  -A       Char::Ehp15::A   Age of file (at startup) in days since last access
+  -C       Char::Ehp15::C   Age of file (at startup) in days since inode change
+  --------------------------------------------------------------------------
 
 As of Perl 5.00503, as a form of purely syntactic sugar, you can stack file
 test operators, in a way that -w -x $file is equivalent to -x $file && -w _ .
@@ -5422,16 +5426,38 @@ Back to and see 'Escaping Your Script'. Enjoy hacking!!
 You need write 'Char::HP15::' at head of function name when you want character
 oriented function. See 'Character Oriented Functions'.
 
-  ---------------------------------
-  Before      After
-  ---------------------------------
-  ord         Char::HP15::ord
-  reverse     Char::HP15::reverse
-  length      Char::HP15::length
-  substr      Char::HP15::substr
-  index       Char::HP15::index
-  rindex      Char::HP15::rindex
-  ---------------------------------
+  --------------------------------------------------------
+  Function   Character Oriented   Description
+  --------------------------------------------------------
+  ord        Char::HP15::ord
+  reverse    Char::HP15::reverse
+  length     Char::HP15::length
+  substr     Char::HP15::substr
+  index      Char::HP15::index          See 'About Indexes'
+  rindex     Char::HP15::rindex         See 'About Rindexes'
+  --------------------------------------------------------
+
+  About Indexes
+  -------------------------------------------------------------------------
+  Function       Works as    Returns as   Description
+  -------------------------------------------------------------------------
+  index          Character   Byte         JPerl semantics (most useful)
+  (same as Char::Ehp15::index)
+  Char::HP15::index    Character   Character    Character-oriented semantics
+  CORE::index    Byte        Byte         Byte-oriented semantics
+  (nothing)      Byte        Character    (most useless)
+  -------------------------------------------------------------------------
+
+  About Rindexes
+  -------------------------------------------------------------------------
+  Function       Works as    Returns as   Description
+  -------------------------------------------------------------------------
+  rindex         Character   Byte         JPerl semantics (most useful)
+  (same as Char::Ehp15::rindex)
+  Char::HP15::rindex   Character   Character    Character-oriented semantics
+  CORE::rindex   Byte        Byte         Byte-oriented semantics
+  (nothing)      Byte        Character    (most useless)
+  -------------------------------------------------------------------------
 
 =head1 Character Oriented Functions
 
@@ -5970,7 +5996,7 @@ programming environment like at that time.
 
  Programming Perl, Second Edition
  By Larry Wall, Tom Christiansen, Randal L. Schwartz
- January 1900 (really so?)
+ October 1996
  Pages: 670
  ISBN 10: 1-56592-149-6 | ISBN 13: 9781565921498
  http://shop.oreilly.com/product/9781565921498.do
@@ -5981,6 +6007,16 @@ programming environment like at that time.
  Pages: 1104
  ISBN 10: 0-596-00027-8 | ISBN 13: 9780596000271
  http://shop.oreilly.com/product/9780596000271.do
+
+ Programming Perl, 4th Edition
+ By: Tom Christiansen, brian d foy, Larry Wall, Jon Orwant
+ Publisher: O'Reilly Media
+ Formats: Print, Ebook, Safari Books Online
+ Released: February 2012
+ Pages: 1054
+ Print ISBN: 978-0-596-00492-7 | ISBN 10: 0-596-00492-3
+ Ebook ISBN: 978-1-4493-9890-3 | ISBN 10: 1-4493-9890-1
+ http://shop.oreilly.com/product/9780596004927.do
 
  Perl Cookbook, Second Edition
  By Tom Christiansen, Nathan Torkington
