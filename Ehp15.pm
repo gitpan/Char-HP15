@@ -13,10 +13,10 @@ BEGIN {
     if ($^X =~ / jperl /oxmsi) {
         die __FILE__, ": needs perl(not jperl) 5.00503 or later. (\$^X==$^X)";
     }
-    if (ord('A') == 193) {
+    if (CORE::ord('A') == 193) {
         die __FILE__, ": is not US-ASCII script (may be EBCDIC or EBCDIK script).";
     }
-    if (ord('A') != 0x41) {
+    if (CORE::ord('A') != 0x41) {
         die __FILE__, ": is not US-ASCII script (must be US-ASCII script).";
     }
 }
@@ -27,7 +27,7 @@ BEGIN {
 # (and so on)
 
 BEGIN { eval q{ use vars qw($VERSION) } }
-$VERSION = sprintf '%d.%02d', q$Revision: 0.82 $ =~ /(\d+)/xmsg;
+$VERSION = sprintf '%d.%02d', q$Revision: 0.83 $ =~ /(\d+)/xmsg;
 
 BEGIN {
     my $PERL5LIB = __FILE__;
@@ -298,71 +298,72 @@ sub HP15::rindex($$;$);
 # Character class
 #
 BEGIN { eval q{ use vars qw(
-    @anchor
-    @dot
-    @dot_s
-    @eD
-    @eS
-    @eW
-    @eH
-    @eV
-    @eR
-    @eN
-    @not_alnum
-    @not_alpha
-    @not_ascii
-    @not_blank
-    @not_cntrl
-    @not_digit
-    @not_graph
-    @not_lower
-    @not_lower_i
-    @not_print
-    @not_punct
-    @not_space
-    @not_upper
-    @not_upper_i
-    @not_word
-    @not_xdigit
-    @eb
-    @eB
+    $anchor
+    $dot
+    $dot_s
+    $eD
+    $eS
+    $eW
+    $eH
+    $eV
+    $eR
+    $eN
+    $not_alnum
+    $not_alpha
+    $not_ascii
+    $not_blank
+    $not_cntrl
+    $not_digit
+    $not_graph
+    $not_lower
+    $not_lower_i
+    $not_print
+    $not_punct
+    $not_space
+    $not_upper
+    $not_upper_i
+    $not_word
+    $not_xdigit
+    $eb
+    $eB
+    $matched
 ) } }
-@{Ehp15::anchor}      = qr{\G(?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE])*?};
-@{Ehp15::dot}         = qr{(?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x0A])};
-@{Ehp15::dot_s}       = qr{(?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE])};
-@{Ehp15::eD}          = qr{(?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE0-9])};
+${Ehp15::anchor}      = qr{\G(?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE])*?};
+${Ehp15::dot}         = qr{(?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x0A])};
+${Ehp15::dot_s}       = qr{(?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE])};
+${Ehp15::eD}          = qr{(?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE0-9])};
 
-@{Ehp15::eS}          = qr{(?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x09\x0A\x0C\x0D\x20])};
+${Ehp15::eS}          = qr{(?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x09\x0A\x0C\x0D\x20])};
 
 # Incompatible Changes
 # \s in regular expressions now matches a Vertical Tab (experimental)
 # http://search.cpan.org/~zefram/perl-5.17.0/pod/perldelta.pod
 
-# @{Ehp15::eS}        = qr{(?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x09\x0A\x0B\x0C\x0D\x20])};
+# ${Ehp15::eS}        = qr{(?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x09\x0A\x0B\x0C\x0D\x20])};
 
-@{Ehp15::eW}          = qr{(?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE0-9A-Z_a-z])};
-@{Ehp15::eH}          = qr{(?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x09\x20])};
-@{Ehp15::eV}          = qr{(?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x0A\x0B\x0C\x0D])};
-@{Ehp15::eR}          = qr{(?:\x0D\x0A|[\x0A\x0D])};
-@{Ehp15::eN}          = qr{(?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x0A])};
-@{Ehp15::not_alnum}   = qr{(?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x30-\x39\x41-\x5A\x61-\x7A])};
-@{Ehp15::not_alpha}   = qr{(?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x41-\x5A\x61-\x7A])};
-@{Ehp15::not_ascii}   = qr{(?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x00-\x7F])};
-@{Ehp15::not_blank}   = qr{(?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x09\x20])};
-@{Ehp15::not_cntrl}   = qr{(?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x00-\x1F\x7F])};
-@{Ehp15::not_digit}   = qr{(?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x30-\x39])};
-@{Ehp15::not_graph}   = qr{(?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x21-\x7F])};
-@{Ehp15::not_lower}   = qr{(?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x61-\x7A])};
-@{Ehp15::not_lower_i} = qr{(?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE])};
-@{Ehp15::not_print}   = qr{(?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x20-\x7F])};
-@{Ehp15::not_punct}   = qr{(?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x21-\x2F\x3A-\x3F\x40\x5B-\x5F\x60\x7B-\x7E])};
-@{Ehp15::not_space}   = qr{(?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x09\x0A\x0B\x0C\x0D\x20])};
-@{Ehp15::not_upper}   = qr{(?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x41-\x5A])};
-@{Ehp15::not_upper_i} = qr{(?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE])};
-@{Ehp15::not_word}    = qr{(?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x30-\x39\x41-\x5A\x5F\x61-\x7A])};
-@{Ehp15::not_xdigit}  = qr{(?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x30-\x39\x41-\x46\x61-\x66])};
-@{Ehp15::eb}          = qr{(?:\A(?=[0-9A-Z_a-z])|(?<=[\x00-\x2F\x40\x5B-\x5E\x60\x7B-\xFF])(?=[0-9A-Z_a-z])|(?<=[0-9A-Z_a-z])(?=[\x00-\x2F\x40\x5B-\x5E\x60\x7B-\xFF]|\z))};
-@{Ehp15::eB}          = qr{(?:(?<=[0-9A-Z_a-z])(?=[0-9A-Z_a-z])|(?<=[\x00-\x2F\x40\x5B-\x5E\x60\x7B-\xFF])(?=[\x00-\x2F\x40\x5B-\x5E\x60\x7B-\xFF]))};
+${Ehp15::eW}          = qr{(?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE0-9A-Z_a-z])};
+${Ehp15::eH}          = qr{(?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x09\x20])};
+${Ehp15::eV}          = qr{(?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x0A\x0B\x0C\x0D])};
+${Ehp15::eR}          = qr{(?:\x0D\x0A|[\x0A\x0D])};
+${Ehp15::eN}          = qr{(?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x0A])};
+${Ehp15::not_alnum}   = qr{(?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x30-\x39\x41-\x5A\x61-\x7A])};
+${Ehp15::not_alpha}   = qr{(?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x41-\x5A\x61-\x7A])};
+${Ehp15::not_ascii}   = qr{(?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x00-\x7F])};
+${Ehp15::not_blank}   = qr{(?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x09\x20])};
+${Ehp15::not_cntrl}   = qr{(?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x00-\x1F\x7F])};
+${Ehp15::not_digit}   = qr{(?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x30-\x39])};
+${Ehp15::not_graph}   = qr{(?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x21-\x7F])};
+${Ehp15::not_lower}   = qr{(?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x61-\x7A])};
+${Ehp15::not_lower_i} = qr{(?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE])};
+${Ehp15::not_print}   = qr{(?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x20-\x7F])};
+${Ehp15::not_punct}   = qr{(?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x21-\x2F\x3A-\x3F\x40\x5B-\x5F\x60\x7B-\x7E])};
+${Ehp15::not_space}   = qr{(?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x09\x0A\x0B\x0C\x0D\x20])};
+${Ehp15::not_upper}   = qr{(?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x41-\x5A])};
+${Ehp15::not_upper_i} = qr{(?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE])};
+${Ehp15::not_word}    = qr{(?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x30-\x39\x41-\x5A\x5F\x61-\x7A])};
+${Ehp15::not_xdigit}  = qr{(?:[\x80-\xA0\xE0-\xFE][\x00-\xFF]|[^\x80-\xA0\xE0-\xFE\x30-\x39\x41-\x46\x61-\x66])};
+${Ehp15::eb}          = qr{(?:\A(?=[0-9A-Z_a-z])|(?<=[\x00-\x2F\x40\x5B-\x5E\x60\x7B-\xFF])(?=[0-9A-Z_a-z])|(?<=[0-9A-Z_a-z])(?=[\x00-\x2F\x40\x5B-\x5E\x60\x7B-\xFF]|\z))};
+${Ehp15::eB}          = qr{(?:(?<=[0-9A-Z_a-z])(?=[0-9A-Z_a-z])|(?<=[\x00-\x2F\x40\x5B-\x5E\x60\x7B-\xFF])(?=[\x00-\x2F\x40\x5B-\x5E\x60\x7B-\xFF]))};
 
 #
 # @ARGV wildcard globbing
@@ -866,7 +867,7 @@ sub Ehp15::fc(@) {
 }
 
 #
-# HP-15 fold case lower case without parameter
+# HP-15 fold case without parameter
 #
 sub Ehp15::fc_() {
     my $s = $_;
@@ -908,7 +909,7 @@ sub Ehp15::fc_() {
     # in Chapter 29. Pragmatic Modules
     # of ISBN 978-0-596-00492-7 Programming Perl 4th Edition.
 
-    @Ehp15::matched = (qr/(?{Ehp15::matched})/);
+    $Ehp15::matched = qr/(?{Ehp15::matched})/;
 }
 
 #
@@ -952,9 +953,11 @@ sub Ehp15::ignorecase(@) {
 
                         # escape character
                         for my $char (@charlist) {
+                            if (0) {
+                            }
 
                             # do not use quotemeta here
-                            if ($char =~ /\A ([\x80-\xFF].*) ($metachar) \z/oxms) {
+                            elsif ($char =~ /\A ([\x80-\xFF].*) ($metachar) \z/oxms) {
                                 $char = $1 . '\\' . $2;
                             }
                             elsif ($char =~ /\A [.|)] \z/oxms) {
@@ -991,9 +994,11 @@ sub Ehp15::ignorecase(@) {
 
                         # escape character
                         for my $char (@charlist) {
+                            if (0) {
+                            }
 
                             # do not use quotemeta here
-                            if ($char =~ /\A ([\x80-\xFF].*) ($metachar) \z/oxms) {
+                            elsif ($char =~ /\A ([\x80-\xFF].*) ($metachar) \z/oxms) {
                                 $char = $1 . '\\' . $2;
                             }
                             elsif ($char =~ /\A [.|)] \z/oxms) {
@@ -1034,8 +1039,11 @@ sub Ehp15::ignorecase(@) {
         for (my $i=0; $i <= $#char; $i++) {
             next if not defined $char[$i];
 
+            if (0) {
+            }
+
             # escape last octet of multiple-octet
-            if ($char[$i] =~ /\A ([\x80-\xFF].*) ($metachar) \z/oxms) {
+            elsif ($char[$i] =~ /\A ([\x80-\xFF].*) ($metachar) \z/oxms) {
                 $char[$i] = $1 . '\\' . $2;
             }
 
@@ -1061,9 +1069,9 @@ sub classic_character_class($) {
     my($char) = @_;
 
     return {
-        '\D' => '@{Ehp15::eD}',
-        '\S' => '@{Ehp15::eS}',
-        '\W' => '@{Ehp15::eW}',
+        '\D' => '${Ehp15::eD}',
+        '\S' => '${Ehp15::eS}',
+        '\W' => '${Ehp15::eW}',
         '\d' => '[0-9]',
                  # \t  \n  \f  \r space
         '\s' => '[\x09\x0A\x0C\x0D\x20]',
@@ -1101,11 +1109,11 @@ sub classic_character_class($) {
 
         # (and so on)
 
-        '\H' => '@{Ehp15::eH}',
-        '\V' => '@{Ehp15::eV}',
+        '\H' => '${Ehp15::eH}',
+        '\V' => '${Ehp15::eV}',
         '\h' => '[\x09\x20]',
         '\v' => '[\x0A\x0B\x0C\x0D]',
-        '\R' => '@{Ehp15::eR}',
+        '\R' => '${Ehp15::eR}',
 
         # \N
         #
@@ -1113,7 +1121,7 @@ sub classic_character_class($) {
         # Character Classes and other Special Escapes
         # Any character but \n (experimental). Not affected by /s modifier
 
-        '\N' => '@{Ehp15::eN}',
+        '\N' => '${Ehp15::eN}',
 
         # \b \B
 
@@ -1126,10 +1134,10 @@ sub classic_character_class($) {
         # of ISBN 978-0-596-00492-7 Programming Perl 4th Edition.
 
         # '\b' => '(?:(?<=\A|\W)(?=\w)|(?<=\w)(?=\W|\z))',
-        '\b' => '@{Ehp15::eb}',
+        '\b' => '${Ehp15::eb}',
 
         # '\B' => '(?:(?<=\w)(?=\w)|(?<=\W)(?=\W))',
-        '\B' => '@{Ehp15::eB}',
+        '\B' => '${Ehp15::eB}',
 
     }->{$char} || '';
 }
@@ -1697,19 +1705,19 @@ sub _charlist {
             $char[$i] = hexchr($1);
         }
 
-        # \N{CHARNAME} --> N{CHARNAME}
-        elsif ($char[$i] =~ /\A \\ ( N\{ ([^\x80-\xA0\xE0-\xFE0-9\}][^\x80-\xA0\xE0-\xFE\}]*) \} ) \z/oxms) {
-            $char[$i] = $1;
+        # \N{CHARNAME} --> N\{CHARNAME}
+        elsif ($char[$i] =~ /\A \\ (N) ( \{ ([^\x80-\xA0\xE0-\xFE0-9\}][^\x80-\xA0\xE0-\xFE\}]*) \} ) \z/oxms) {
+            $char[$i] = $1 . '\\' . $2;
         }
 
-        # \p{PROPERTY} --> p{PROPERTY}
-        elsif ($char[$i] =~ /\A \\ ( p\{ ([^\x80-\xA0\xE0-\xFE0-9\}][^\x80-\xA0\xE0-\xFE\}]*) \} ) \z/oxms) {
-            $char[$i] = $1;
+        # \p{PROPERTY} --> p\{PROPERTY}
+        elsif ($char[$i] =~ /\A \\ (p) ( \{ ([^\x80-\xA0\xE0-\xFE0-9\}][^\x80-\xA0\xE0-\xFE\}]*) \} ) \z/oxms) {
+            $char[$i] = $1 . '\\' . $2;
         }
 
-        # \P{PROPERTY} --> P{PROPERTY}
-        elsif ($char[$i] =~ /\A \\ ( P\{ ([^\x80-\xA0\xE0-\xFE0-9\}][^\x80-\xA0\xE0-\xFE\}]*) \} ) \z/oxms) {
-            $char[$i] = $1;
+        # \P{PROPERTY} --> P\{PROPERTY}
+        elsif ($char[$i] =~ /\A \\ (P) ( \{ ([^\x80-\xA0\xE0-\xFE0-9\}][^\x80-\xA0\xE0-\xFE\}]*) \} ) \z/oxms) {
+            $char[$i] = $1 . '\\' . $2;
         }
 
         # \p, \P, \X --> p, P, X
@@ -1748,15 +1756,15 @@ sub _charlist {
                 # '\s' => '[\x09\x0A\x0B\x0C\x0D\x20]',
 
                 '\w' => '[0-9A-Z_a-z]',
-                '\D' => '@{Ehp15::eD}',
-                '\S' => '@{Ehp15::eS}',
-                '\W' => '@{Ehp15::eW}',
+                '\D' => '${Ehp15::eD}',
+                '\S' => '${Ehp15::eS}',
+                '\W' => '${Ehp15::eW}',
 
-                '\H' => '@{Ehp15::eH}',
-                '\V' => '@{Ehp15::eV}',
+                '\H' => '${Ehp15::eH}',
+                '\V' => '${Ehp15::eV}',
                 '\h' => '[\x09\x20]',
                 '\v' => '[\x0A\x0B\x0C\x0D]',
-                '\R' => '@{Ehp15::eR}',
+                '\R' => '${Ehp15::eR}',
 
             }->{$1};
         }
@@ -1767,8 +1775,8 @@ sub _charlist {
 
                 '[:lower:]'   => '[\x41-\x5A\x61-\x7A]',
                 '[:upper:]'   => '[\x41-\x5A\x61-\x7A]',
-                '[:^lower:]'  => '@{Ehp15::not_lower_i}',
-                '[:^upper:]'  => '@{Ehp15::not_upper_i}',
+                '[:^lower:]'  => '${Ehp15::not_lower_i}',
+                '[:^upper:]'  => '${Ehp15::not_upper_i}',
 
             }->{$1};
         }
@@ -1789,20 +1797,20 @@ sub _charlist {
                 '[:upper:]'   => '[\x41-\x5A]',
                 '[:word:]'    => '[\x30-\x39\x41-\x5A\x5F\x61-\x7A]',
                 '[:xdigit:]'  => '[\x30-\x39\x41-\x46\x61-\x66]',
-                '[:^alnum:]'  => '@{Ehp15::not_alnum}',
-                '[:^alpha:]'  => '@{Ehp15::not_alpha}',
-                '[:^ascii:]'  => '@{Ehp15::not_ascii}',
-                '[:^blank:]'  => '@{Ehp15::not_blank}',
-                '[:^cntrl:]'  => '@{Ehp15::not_cntrl}',
-                '[:^digit:]'  => '@{Ehp15::not_digit}',
-                '[:^graph:]'  => '@{Ehp15::not_graph}',
-                '[:^lower:]'  => '@{Ehp15::not_lower}',
-                '[:^print:]'  => '@{Ehp15::not_print}',
-                '[:^punct:]'  => '@{Ehp15::not_punct}',
-                '[:^space:]'  => '@{Ehp15::not_space}',
-                '[:^upper:]'  => '@{Ehp15::not_upper}',
-                '[:^word:]'   => '@{Ehp15::not_word}',
-                '[:^xdigit:]' => '@{Ehp15::not_xdigit}',
+                '[:^alnum:]'  => '${Ehp15::not_alnum}',
+                '[:^alpha:]'  => '${Ehp15::not_alpha}',
+                '[:^ascii:]'  => '${Ehp15::not_ascii}',
+                '[:^blank:]'  => '${Ehp15::not_blank}',
+                '[:^cntrl:]'  => '${Ehp15::not_cntrl}',
+                '[:^digit:]'  => '${Ehp15::not_digit}',
+                '[:^graph:]'  => '${Ehp15::not_graph}',
+                '[:^lower:]'  => '${Ehp15::not_lower}',
+                '[:^print:]'  => '${Ehp15::not_print}',
+                '[:^punct:]'  => '${Ehp15::not_punct}',
+                '[:^space:]'  => '${Ehp15::not_space}',
+                '[:^upper:]'  => '${Ehp15::not_upper}',
+                '[:^word:]'   => '${Ehp15::not_word}',
+                '[:^xdigit:]' => '${Ehp15::not_xdigit}',
 
             }->{$1};
         }
@@ -4841,6 +4849,12 @@ sub HP15::reverse(@) {
         return CORE::reverse @_;
     }
     else {
+
+        # One of us once cornered Larry in an elevator and asked him what
+        # problem he was solving with this, but he looked as far off into
+        # the distance as he could in an elevator and said, "It seemed like
+        # a good idea at the time."
+
         return join '', CORE::reverse(join('',@_) =~ /\G ($q_char) /oxmsg);
     }
 }
