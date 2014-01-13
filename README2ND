@@ -1,14 +1,12 @@
 NAME
 
-       Char::HP15 - Source code filter for HP-15 script (Imitation JPerl)
+       HP15 - Source code filter for HP-15 script (Imitation JPerl)
 
 SYNOPSIS
 
     In your script:
 
-      use Char::HP15; # CPAN formal style
-         or
-      use HP15; # casual style
+      use HP15;
 
     At command prompt:
 
